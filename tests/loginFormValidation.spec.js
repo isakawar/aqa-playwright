@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test';
 // Helper function to navigate to the registration pop-up
 async function navigateToRegistrationPage(page) {
   await page.click('.btn.btn-outline-white.header_signin');
-  await page.getByRole('button', { name: 'Registration' }).click();
+  await page.locator('.modal-footer.d-flex.justify-content-between .btn.btn-link').click();
 }
 
 const locators = {
@@ -186,7 +186,7 @@ test.describe.only('should successfully fill in the registration form', () => {
     await navigateToRegistrationPage(page);
   });
 
-  test.only('should successfully fill in the registration form', async ({ page }) => {
+  test('should successfully fill in the registration form', async ({ page }) => {
     const {
       name, lastName, email, password, repeatPassword, submitButton,
     } = locators;
