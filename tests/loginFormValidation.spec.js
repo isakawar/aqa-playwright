@@ -1,13 +1,14 @@
-import { test } from '@playwright/test';
-import RegistrationPage from '../src/components/registrationPage.js';
+import { expect, test } from '@playwright/test';
+import RegistrationPopup from '../src/components/RegistrationPopup.js';
+import WelcomePage from '../src/pageObject/WelcomePage.js';
 
 let page;
-let registrationPage;
+let welcomePage;
 test.describe('Login form validation field Name', () => {
   test.beforeEach(async ({ browser }) => {
     page = await browser.newPage();
-    registrationPage = new RegistrationPage(page);
-    await registrationPage.visit();
+    welcomePage = new WelcomePage(page);
+    await welcomePage.visit();
   });
 
   test.afterEach(async () => {
@@ -15,44 +16,58 @@ test.describe('Login form validation field Name', () => {
   });
 
   test('should show error message if Name is incorrect', async () => {
-    await registrationPage.navigateToRegistrationPage();
-    await registrationPage.fillFieldByLocator(registrationPage.locators.name, '1234567890');
-    await registrationPage.assertErrorMessageVisible();
-    await registrationPage.assertErrorMessageText('Name is invalid');
+    const registrationPopup = new RegistrationPopup(page);
+    await welcomePage.navigateToRegistrationPopup();
+    await registrationPopup.nameInput.fill('1234567890');
+    await registrationPopup.nameInput.blur();
+
+    await expect(registrationPopup.errorMessage).toBeVisible();
+    await expect(registrationPopup.errorMessage).toHaveText('Name is invalid');
   });
 
   test('should show error message if Name is empty', async () => {
-    await registrationPage.navigateToRegistrationPage();
-    await registrationPage.fillFieldByLocator(registrationPage.locators.name, '');
-    await registrationPage.assertErrorMessageVisible();
-    await registrationPage.assertErrorMessageText('Name required');
+    const registrationPopup = new RegistrationPopup(page);
+    await welcomePage.navigateToRegistrationPopup();
+    await registrationPopup.nameInput.fill('');
+    await registrationPopup.nameInput.blur();
+
+    await expect(registrationPopup.errorMessage).toBeVisible();
+    await expect(registrationPopup.errorMessage).toHaveText('Name required');
   });
 
   test('should show error message if Name length is more than 20 characters', async () => {
-    await registrationPage.navigateToRegistrationPage();
-    await registrationPage.fillFieldByLocator(registrationPage.locators.name, 'aaaaaaaaaaaaaaaaaaaaa');
-    await registrationPage.assertErrorMessageVisible();
-    await registrationPage.assertErrorMessageText('Name has to be from 2 to 20 characters long');
+    const registrationPopup = new RegistrationPopup(page);
+    await welcomePage.navigateToRegistrationPopup();
+    await registrationPopup.nameInput.fill('Name has to be from 2 to 20 characters long');
+    await registrationPopup.nameInput.blur();
+
+    await expect(registrationPopup.errorMessage).toBeVisible();
+    await expect(registrationPopup.errorMessage).toHaveText('Name is invalidName has to be from 2 to 20 characters long');
   });
 
   test('should have red border color for invalid Name', async () => {
-    await registrationPage.navigateToRegistrationPage();
-    await registrationPage.fillFieldByLocator(registrationPage.locators.name, '1234567890');
-    await registrationPage.assertCheckFieldBorderColor(registrationPage.locators.name, 'rgb(220, 53, 69)');
+    const registrationPopup = new RegistrationPopup(page);
+    await welcomePage.navigateToRegistrationPopup();
+    await registrationPopup.nameInput.fill('1234567890');
+    await registrationPopup.nameInput.blur();
+    await registrationPopup.assertCheckThatFieldBorderColorIsRed();
   });
 
   test('should successfully fill in the Name field', async () => {
-    await registrationPage.navigateToRegistrationPage();
-    await registrationPage.fillFieldByLocator(registrationPage.locators.name, 'Test');
-    await registrationPage.assertErrorMessageNotVisible();
+    const registrationPopup = new RegistrationPopup(page);
+    await welcomePage.navigateToRegistrationPopup();
+
+    await registrationPopup.nameInput.fill('Test');
+    await registrationPopup.nameInput.blur();
+    await expect(registrationPopup.errorMessage).not.toBeVisible();
   });
 });
 
 test.describe('Login form validation field Email', () => {
   test.beforeEach(async ({ browser }) => {
     page = await browser.newPage();
-    registrationPage = new RegistrationPage(page);
-    await registrationPage.visit();
+    welcomePage = new WelcomePage(page);
+    await welcomePage.visit();
   });
 
   test.afterEach(async () => {
@@ -60,25 +75,30 @@ test.describe('Login form validation field Email', () => {
   });
 
   test('should display "Email required" error for empty Email field', async () => {
-    await registrationPage.navigateToRegistrationPage();
-    await registrationPage.fillFieldByLocator(registrationPage.locators.email, '');
-    await registrationPage.assertErrorMessageText('Email required');
+    const registrationPopup = new RegistrationPopup(page);
+    await welcomePage.navigateToRegistrationPopup();
+    await registrationPopup.emailInput.fill('');
+    await registrationPopup.emailInput.blur();
+    await expect(registrationPopup.errorMessage).toHaveText('Email required');
   });
 
   test('should display "Email is incorrect" error for wrong data in Email field', async () => {
-    await registrationPage.navigateToRegistrationPage();
-    await registrationPage.fillFieldByLocator(registrationPage.locators.email, 'invalid-email');
-    await registrationPage.assertCheckVisible();
-    await registrationPage.assertErrorMessageText('Email is incorrect');
-    await registrationPage.assertCheckFieldBorderColor(registrationPage.locators.email, 'rgb(220, 53, 69)');
+    const registrationPopup = new RegistrationPopup(page);
+    await welcomePage.navigateToRegistrationPopup();
+    await registrationPopup.emailInput.fill('invalid-email');
+    await registrationPopup.emailInput.blur();
+
+    await expect(registrationPopup.errorMessage).toBeVisible();
+    await expect(registrationPopup.errorMessage).toHaveText('Email is incorrect');
+    await registrationPopup.assertCheckThatFieldBorderColorIsRed();
   });
 });
 
 test.describe('Login form validation field Password', () => {
   test.beforeEach(async ({ browser }) => {
     page = await browser.newPage();
-    registrationPage = new RegistrationPage(page);
-    await registrationPage.visit();
+    welcomePage = new WelcomePage(page);
+    await welcomePage.visit();
   });
 
   test.afterEach(async () => {
@@ -86,26 +106,32 @@ test.describe('Login form validation field Password', () => {
   });
 
   test('should display "Password required" error for empty Password field', async () => {
-    await registrationPage.navigateToRegistrationPage();
-    await registrationPage.fillFieldByLocator(registrationPage.locators.password, '');
-    await registrationPage.assertCheckVisible();
-    await registrationPage.assertErrorMessageText('Password required');
-    await registrationPage.assertCheckFieldBorderColor(registrationPage.locators.password, 'rgb(220, 53, 69)');
+    const registrationPopup = new RegistrationPopup(page);
+    await welcomePage.navigateToRegistrationPopup();
+    await registrationPopup.passwordInput.fill('');
+    await registrationPopup.passwordInput.blur();
+
+    await expect(registrationPopup.errorMessage).toBeVisible();
+    await expect(registrationPopup.errorMessage).toHaveText('Password required');
+    await registrationPopup.assertCheckThatFieldBorderColorIsRed();
   });
 
   test('should display "Password has to be from 8 to 15 characters long and contain at least one integer, one capital, and one small letter" error for wrong data in Password field', async () => {
-    await registrationPage.navigateToRegistrationPage();
-    await registrationPage.fillFieldByLocator(registrationPage.locators.password, 'weakpassword');
-    await registrationPage.assertErrorMessageText('Password has to be from 8 to 15 characters long and contain at least one integer, one capital, and one small letter');
-    await registrationPage.assertCheckFieldBorderColor(registrationPage.locators.password, 'rgb(220, 53, 69)');
+    const registrationPopup = new RegistrationPopup(page);
+    await welcomePage.navigateToRegistrationPopup();
+    await registrationPopup.passwordInput.fill('weakpassword');
+    await registrationPopup.passwordInput.blur();
+
+    await expect(registrationPopup.errorMessage).toHaveText('Password has to be from 8 to 15 characters long and contain at least one integer, one capital, and one small letter');
+    await registrationPopup.assertCheckThatFieldBorderColorIsRed();
   });
 });
 
 test.describe('Login form validation field Re-enter password', () => {
   test.beforeEach(async ({ browser }) => {
     page = await browser.newPage();
-    registrationPage = new RegistrationPage(page);
-    await registrationPage.visit();
+    welcomePage = new WelcomePage(page);
+    await welcomePage.visit();
   });
 
   test.afterEach(async () => {
@@ -113,26 +139,35 @@ test.describe('Login form validation field Re-enter password', () => {
   });
 
   test('should display "Re-enter password required" error for empty Re-enter password field', async () => {
-    await registrationPage.navigateToRegistrationPage();
-    await registrationPage.fillFieldByLocator(registrationPage.locators.repeatPassword, '');
-    await registrationPage.assertErrorMessageText('Re-enter password required');
-    await registrationPage.assertCheckFieldBorderColor(registrationPage.locators.repeatPassword, 'rgb(220, 53, 69)');
+    const registrationPopup = new RegistrationPopup(page);
+    await welcomePage.navigateToRegistrationPopup();
+    await registrationPopup.repeatPasswordInput.fill('');
+    await registrationPopup.repeatPasswordInput.blur();
+
+    await expect(registrationPopup.errorMessage).toBeVisible();
+    await expect(registrationPopup.errorMessage).toHaveText('Re-enter password required');
+    await registrationPopup.assertCheckThatFieldBorderColorIsRed();
   });
 
   test('should display "Passwords do not match" error for mismatched passwords', async () => {
-    await registrationPage.navigateToRegistrationPage();
-    await registrationPage.fillFieldByLocator(registrationPage.locators.password, 'Password123');
-    await registrationPage.fillFieldByLocator(registrationPage.locators.repeatPassword, 'DifferentP123');
-    await registrationPage.assertErrorMessageText('Passwords do not match');
-    await registrationPage.assertCheckFieldBorderColor(registrationPage.locators.repeatPassword, 'rgb(220, 53, 69)');
+    const registrationPopup = new RegistrationPopup(page);
+    await welcomePage.navigateToRegistrationPopup();
+    await registrationPopup.passwordInput.fill('Password123');
+    await registrationPopup.passwordInput.blur();
+    await registrationPopup.repeatPasswordInput.fill('DifferentP123');
+    await registrationPopup.repeatPasswordInput.blur();
+
+    await expect(registrationPopup.errorMessage).toBeVisible();
+    await expect(registrationPopup.errorMessage).toHaveText('Passwords do not match');
+    await registrationPopup.assertCheckThatFieldBorderColorIsRed();
   });
 });
 
 test.describe('should successfully fill in the registration form', () => {
   test.beforeEach(async ({ browser }) => {
     page = await browser.newPage();
-    registrationPage = new RegistrationPage(page);
-    await registrationPage.visit();
+    welcomePage = new WelcomePage(page);
+    await welcomePage.visit();
   });
 
   test.afterEach(async () => {
@@ -140,14 +175,15 @@ test.describe('should successfully fill in the registration form', () => {
   });
 
   test('should successfully fill in the registration form', async () => {
-    await registrationPage.navigateToRegistrationPage();
-    await registrationPage.fillFieldByLocator(registrationPage.locators.name, 'Vlad');
-    await registrationPage.fillFieldByLocator(registrationPage.locators.lastName, 'Bilobrov');
-    await registrationPage.fillFieldByLocator(registrationPage.locators.email, 'example@example.com');
-    await registrationPage.fillFieldByLocator(registrationPage.locators.password, 'Password123');
-    await registrationPage.fillFieldByLocator(registrationPage.locators.repeatPassword, 'Password123');
+    const registrationPopup = new RegistrationPopup(page);
+    await welcomePage.navigateToRegistrationPopup();
+    await registrationPopup.nameInput.fill('Vlad');
+    await registrationPopup.lastNameInput.fill('Bilobrov');
+    await registrationPopup.emailInput.fill('example@example.com');
+    await registrationPopup.passwordInput.fill('Password123');
+    await registrationPopup.repeatPasswordInput.fill('Password123');
 
-    await registrationPage.assertErrorMessageNotVisible();
-    await registrationPage.checkEnabledSubmitButton();
+    await expect(registrationPopup.errorMessage).not.toBeVisible();
+    await expect(registrationPopup.submitButton).toBeEnabled();
   });
 });

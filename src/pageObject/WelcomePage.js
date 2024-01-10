@@ -1,17 +1,15 @@
-export default class BasePage {
+import BasePage from './BasePage.js';
+import SignInPage from '../components/SignInPopup.js';
+import RegistrationPopup from '../components/RegistrationPopup.js';
+
+export default class WelcomePage extends BasePage {
   constructor(page) {
-    this.page = page;
-    this.url = '/';
-    this.signInButtonLocator = '.btn.btn-outline-white.header_signin';
-    this.registerButtonLocator = '.modal-footer.d-flex.justify-content-between .btn.btn-link';
+    super(page, '/');
   }
 
-  async visit() {
-    await this.page.goto(this.url);
-  }
-
-  async navigateToRegistrationPage() {
-    await this.page.click(this.signInButtonLocator);
-    await this.page.click(this.registerButtonLocator);
+  async navigateToRegistrationPopup() {
+    const signInPopup = new SignInPage(this.page);
+    await this.page.click(signInPopup.signInButtonLocator);
+    await this.page.click(signInPopup.registerButtonLocator);
   }
 }

@@ -1,17 +1,10 @@
 export default class BasePage {
-  constructor(page) {
+  constructor(page, url) {
     this.page = page;
-    this.url = '/';
-    this.signInButtonLocator = '.btn.btn-outline-white.header_signin';
-    this.registerButtonLocator = '.modal-footer.d-flex.justify-content-between .btn.btn-link';
+    this.url = url;
   }
 
   async visit() {
     await this.page.goto(this.url);
-  }
-
-  async navigateToRegistrationPage() {
-    await this.page.click(this.signInButtonLocator);
-    await this.page.click(this.registerButtonLocator);
   }
 }

@@ -1,54 +1,20 @@
 import { expect } from '@playwright/test';
-import BasePage from '../pageObject/basePage';
+import BasePage from '../pageObject/BasePage.js';
 
-export default class RegistrationPage extends BasePage {
+export default class RegistrationPopup {
   constructor(page) {
-    super(page);
-    this.url = '/';
-    this.locators = {
-      name: '#signupName',
-      email: '#signupEmail',
-      lastName: '#signupLastName',
-      password: '#signupPassword',
-      repeatPassword: '#signupRepeatPassword',
-      submitButton: '.modal-footer .btn.btn-primary',
-      errorMessage: '.invalid-feedback',
-    };
+    this.nameInput = page.locator('#signupName');
+    this.emailInput = page.locator('#signupEmail');
+    this.lastNameInput = page.locator('#signupLastName');
+    this.passwordInput = page.locator('#signupPassword');
+    this.repeatPasswordInput = page.locator('#signupRepeatPassword');
+    this.submitButton = page.locator('.modal-footer .btn.btn-primary');
+    this.errorMessage = page.locator('.invalid-feedback');
+    this.signInButtonLocator = '.btn.btn-outline-white.header_signin';
+    this.registerButtonLocator = '.modal-footer.d-flex.justify-content-between .btn.btn-link';
   }
 
-  async fillFieldByLocator(locator, value) {
-    const element = await this.page.locator(locator).first();
-    await element.fill(value);
-    await element.blur();
-  }
-
-  async assertCheckVisible() {
-    const element = await this.page.locator(this.locators.errorMessage);
-    await expect(element).toBeVisible();
-  }
-
-  async assertErrorMessageText(expectedText) {
-    const element = await this.page.locator(this.locators.errorMessage);
-    await expect(element).toHaveText(expectedText);
-  }
-
-  async assertCheckFieldBorderColor(locator, expectedColor) {
-    const element = await this.page.locator(locator);
-    await expect(element).toHaveCSS('border-color', expectedColor);
-  }
-
-  assertErrorMessageVisible() {
-    const element = this.page.locator(this.locators.errorMessage);
-    expect(element).toBeVisible();
-  }
-
-  async assertErrorMessageNotVisible() {
-    const errorMessage = await this.page.locator(this.locators.errorMessage);
-    await expect(errorMessage).not.toBeVisible();
-  }
-
-  async checkEnabledSubmitButton() {
-    const submitButton = await this.page.locator(this.locators.submitButton);
-    await expect(submitButton).toBeEnabled();
+  async assertCheckThatFieldBorderColorIsRed() {
+    await expect(this.errorMessage).toHaveCSS('border-color', 'rgb(220, 53, 69)');
   }
 }
