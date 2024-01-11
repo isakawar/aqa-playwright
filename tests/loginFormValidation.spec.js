@@ -18,7 +18,7 @@ test.describe('Login form validation field Name', () => {
     await page.close();
   });
 
-  test('should show error message if Name is incorrect', async () => {
+  test('should show error message if Name is incorrect @prod', async () => {
     await registrationPopup.nameInput.fill('1234567890');
     await registrationPopup.nameInput.blur();
 
@@ -34,7 +34,7 @@ test.describe('Login form validation field Name', () => {
     await expect(registrationPopup.errorMessage).toHaveText('Name required');
   });
 
-  test('should show error message if Name length is more than 20 characters', async () => {
+  test('should show error message if Name length is more than 20 characters @prod', async () => {
     await registrationPopup.nameInput.fill('Name has to be from 2 to 20 characters long');
     await registrationPopup.nameInput.blur();
 
@@ -97,7 +97,7 @@ test.describe('Login form validation field Password', () => {
     await page.close();
   });
 
-  test('should display "Password required" error for empty Password field', async () => {
+  test('should display "Password required" error for empty Password field @prod', async () => {
     await registrationPopup.passwordInput.fill('');
     await registrationPopup.passwordInput.blur();
 
@@ -162,7 +162,7 @@ test.describe('should successfully fill in the registration form', () => {
     await page.close();
   });
 
-  test('should successfully fill in the registration form', async () => {
+  test('should successfully fill in the registration form @prod', async () => {
     await registrationPopup.nameInput.fill('Vlad');
     await registrationPopup.lastNameInput.fill('Bilobrov');
     await registrationPopup.emailInput.fill('example@example.com');

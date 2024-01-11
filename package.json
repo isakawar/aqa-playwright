@@ -6,7 +6,8 @@
   "main": "index.js",
   "scripts": {
     "test": "npx playwright test",
-    "test:ui": "npx playwright test --ui"
+    "test:ui": "npx playwright test --ui",
+    "test:prod": "npx playwright test -c playwright.prod.config.js -g '@prod'"
   },
   "repository": {
     "type": "git",
