@@ -4,11 +4,14 @@ import WelcomePage from '../src/pageObject/WelcomePage.js';
 
 let page;
 let welcomePage;
+let registrationPopup;
 test.describe('Login form validation field Name', () => {
   test.beforeEach(async ({ browser }) => {
     page = await browser.newPage();
     welcomePage = new WelcomePage(page);
     await welcomePage.visit();
+    registrationPopup = new RegistrationPopup(page);
+    await welcomePage.navigateToRegistrationPopup();
   });
 
   test.afterEach(async () => {
@@ -16,8 +19,6 @@ test.describe('Login form validation field Name', () => {
   });
 
   test('should show error message if Name is incorrect', async () => {
-    const registrationPopup = new RegistrationPopup(page);
-    await welcomePage.navigateToRegistrationPopup();
     await registrationPopup.nameInput.fill('1234567890');
     await registrationPopup.nameInput.blur();
 
@@ -26,8 +27,6 @@ test.describe('Login form validation field Name', () => {
   });
 
   test('should show error message if Name is empty', async () => {
-    const registrationPopup = new RegistrationPopup(page);
-    await welcomePage.navigateToRegistrationPopup();
     await registrationPopup.nameInput.fill('');
     await registrationPopup.nameInput.blur();
 
@@ -36,8 +35,6 @@ test.describe('Login form validation field Name', () => {
   });
 
   test('should show error message if Name length is more than 20 characters', async () => {
-    const registrationPopup = new RegistrationPopup(page);
-    await welcomePage.navigateToRegistrationPopup();
     await registrationPopup.nameInput.fill('Name has to be from 2 to 20 characters long');
     await registrationPopup.nameInput.blur();
 
@@ -46,17 +43,12 @@ test.describe('Login form validation field Name', () => {
   });
 
   test('should have red border color for invalid Name', async () => {
-    const registrationPopup = new RegistrationPopup(page);
-    await welcomePage.navigateToRegistrationPopup();
     await registrationPopup.nameInput.fill('1234567890');
     await registrationPopup.nameInput.blur();
     await registrationPopup.assertCheckThatFieldBorderColorIsRed();
   });
 
   test('should successfully fill in the Name field', async () => {
-    const registrationPopup = new RegistrationPopup(page);
-    await welcomePage.navigateToRegistrationPopup();
-
     await registrationPopup.nameInput.fill('Test');
     await registrationPopup.nameInput.blur();
     await expect(registrationPopup.errorMessage).not.toBeVisible();
@@ -68,6 +60,8 @@ test.describe('Login form validation field Email', () => {
     page = await browser.newPage();
     welcomePage = new WelcomePage(page);
     await welcomePage.visit();
+    registrationPopup = new RegistrationPopup(page);
+    await welcomePage.navigateToRegistrationPopup();
   });
 
   test.afterEach(async () => {
@@ -75,16 +69,12 @@ test.describe('Login form validation field Email', () => {
   });
 
   test('should display "Email required" error for empty Email field', async () => {
-    const registrationPopup = new RegistrationPopup(page);
-    await welcomePage.navigateToRegistrationPopup();
     await registrationPopup.emailInput.fill('');
     await registrationPopup.emailInput.blur();
     await expect(registrationPopup.errorMessage).toHaveText('Email required');
   });
 
   test('should display "Email is incorrect" error for wrong data in Email field', async () => {
-    const registrationPopup = new RegistrationPopup(page);
-    await welcomePage.navigateToRegistrationPopup();
     await registrationPopup.emailInput.fill('invalid-email');
     await registrationPopup.emailInput.blur();
 
@@ -99,6 +89,8 @@ test.describe('Login form validation field Password', () => {
     page = await browser.newPage();
     welcomePage = new WelcomePage(page);
     await welcomePage.visit();
+    registrationPopup = new RegistrationPopup(page);
+    await welcomePage.navigateToRegistrationPopup();
   });
 
   test.afterEach(async () => {
@@ -106,8 +98,6 @@ test.describe('Login form validation field Password', () => {
   });
 
   test('should display "Password required" error for empty Password field', async () => {
-    const registrationPopup = new RegistrationPopup(page);
-    await welcomePage.navigateToRegistrationPopup();
     await registrationPopup.passwordInput.fill('');
     await registrationPopup.passwordInput.blur();
 
@@ -117,8 +107,6 @@ test.describe('Login form validation field Password', () => {
   });
 
   test('should display "Password has to be from 8 to 15 characters long and contain at least one integer, one capital, and one small letter" error for wrong data in Password field', async () => {
-    const registrationPopup = new RegistrationPopup(page);
-    await welcomePage.navigateToRegistrationPopup();
     await registrationPopup.passwordInput.fill('weakpassword');
     await registrationPopup.passwordInput.blur();
 
@@ -132,6 +120,8 @@ test.describe('Login form validation field Re-enter password', () => {
     page = await browser.newPage();
     welcomePage = new WelcomePage(page);
     await welcomePage.visit();
+    registrationPopup = new RegistrationPopup(page);
+    await welcomePage.navigateToRegistrationPopup();
   });
 
   test.afterEach(async () => {
@@ -139,8 +129,6 @@ test.describe('Login form validation field Re-enter password', () => {
   });
 
   test('should display "Re-enter password required" error for empty Re-enter password field', async () => {
-    const registrationPopup = new RegistrationPopup(page);
-    await welcomePage.navigateToRegistrationPopup();
     await registrationPopup.repeatPasswordInput.fill('');
     await registrationPopup.repeatPasswordInput.blur();
 
@@ -150,8 +138,6 @@ test.describe('Login form validation field Re-enter password', () => {
   });
 
   test('should display "Passwords do not match" error for mismatched passwords', async () => {
-    const registrationPopup = new RegistrationPopup(page);
-    await welcomePage.navigateToRegistrationPopup();
     await registrationPopup.passwordInput.fill('Password123');
     await registrationPopup.passwordInput.blur();
     await registrationPopup.repeatPasswordInput.fill('DifferentP123');
@@ -168,6 +154,8 @@ test.describe('should successfully fill in the registration form', () => {
     page = await browser.newPage();
     welcomePage = new WelcomePage(page);
     await welcomePage.visit();
+    registrationPopup = new RegistrationPopup(page);
+    await welcomePage.navigateToRegistrationPopup();
   });
 
   test.afterEach(async () => {
@@ -175,8 +163,6 @@ test.describe('should successfully fill in the registration form', () => {
   });
 
   test('should successfully fill in the registration form', async () => {
-    const registrationPopup = new RegistrationPopup(page);
-    await welcomePage.navigateToRegistrationPopup();
     await registrationPopup.nameInput.fill('Vlad');
     await registrationPopup.lastNameInput.fill('Bilobrov');
     await registrationPopup.emailInput.fill('example@example.com');
