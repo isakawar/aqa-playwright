@@ -4,7 +4,7 @@ import { STORAGE_STATE_USER_PATH } from '../data/constants/storageState.js';
 import { deleteCarsIfCountGreaterThanZero } from '../utils/deleteCars.js';
 
 export const test = base.extend({
-  userGaragePageWithStorage: async ({ browser }, use) => {
+  userGaragePage: async ({ browser }, use) => {
     const ctx = await browser.newContext({
       storageState: STORAGE_STATE_USER_PATH,
     });
