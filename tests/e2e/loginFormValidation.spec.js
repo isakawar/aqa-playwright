@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
-import RegistrationPopup from '../src/components/RegistrationPopup.js';
-import WelcomePage from '../src/pageObject/WelcomePage.js';
+import RegistrationPopup from '../../src/components/RegistrationPopup.js';
+import WelcomePage from '../../src/pageObject/WelcomePage.js';
 
 let page;
 let welcomePage;
