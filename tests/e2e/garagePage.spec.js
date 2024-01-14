@@ -1,8 +1,8 @@
 import { expect } from '@playwright/test';
-import { test } from '../src/fixtures/userGaragePage.js';
+import { test } from '../../src/fixtures/userGaragePageAuth.js';
 
 test.describe('Garage page', () => {
-  test.only('should add car to garage', async ({ userGaragePage }) => {
+  test('should add car to garage', async ({ userGaragePage }) => {
     const popup = await userGaragePage.openAddCarPopup();
     await popup.fillAndSubmit('Porsche', 'Panamera', 100500);
 

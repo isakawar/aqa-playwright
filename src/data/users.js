@@ -5,5 +5,6 @@ export const USERS = {
     repeatPassword: 'password',
     name: 'Example User',
     lastName: 'Example Last Name',
+    userId: 82712
   },
 };
