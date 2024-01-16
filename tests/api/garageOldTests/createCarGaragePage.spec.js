@@ -1,8 +1,7 @@
 import { expect, request } from '@playwright/test';
 import exp from 'constants';
-import { test } from '../../src/fixtures/userGaragePageAuth.js';
-import { USERS } from '../../src/data/users.js';
-import { STORAGE_STATE_USER_PATH } from '../../src/data/constants/storageState.js';
+import { test } from '../../../src/fixtures/userGaragePageAuth.js';
+import { USERS } from '../../../src/data/users.js';
 
 test.describe('Create car via API', () => {
   test.describe('Positive cases', () => {
