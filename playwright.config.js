@@ -17,14 +17,14 @@ const config = defineConfig({
   /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: 'html',
+  reporter: [['html', { open: 'never' }]],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
     baseURL: testConfig.baseURL,
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-    headless: false,
+    headless: true,
     httpCredentials: testConfig.httpCredentials,
     trace: 'on-first-retry',
     launchOptions: {
@@ -47,6 +47,12 @@ const config = defineConfig({
       use: { ...devices['Desktop Chrome'] },
       dependencies: ['global-setup'],
       teardown: 'global-teardown',
+    },
+    {
+      name: 'API tests',
+      testMatch: '/tests/api/**/*.spec.js',
+      // dependencies: ['global-setup'],
+      // teardown: 'global-teardown',
     },
 
   ],
