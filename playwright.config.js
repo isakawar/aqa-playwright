@@ -1,38 +1,23 @@
 import { defineConfig, devices } from '@playwright/test';
 import { config as testConfig } from './config/config.js';
 
-/**
- * @see https://playwright.dev/docs/test-configuration
- */
 const config = defineConfig({
   testDir: './tests',
-  /* Run tests in files in parallel */
-  // testMatch: 'tests/**/*.spec.js',
   testIgnore: 'tests/**/*.spe.js',
   fullyParallel: false,
-  /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
-  /* Retry on CI only */
   retries: process.env.CI ? 2 : 0,
-  /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 1 : undefined,
-  /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: [['html', { open: 'never' }]],
-  /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
-    /* Base URL to use in actions like `await page.goto('/')`. */
     baseURL: testConfig.baseURL,
-
-    /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     headless: true,
     httpCredentials: testConfig.httpCredentials,
     trace: 'on-first-retry',
     launchOptions: {
-      slowMo: 400,
+      // slowMo: 40_000,
     },
   },
-
-  /* Configure projects for major browsers */
   projects: [
     {
       name: 'global-setup',
@@ -43,6 +28,14 @@ const config = defineConfig({
       testMatch: 'tests/teardown/*.teardown.js',
     },
     {
+      name: 'global-api-setup',
+      testMatch: 'tests/setup/global.api.setup.js',
+    },
+    {
+      name: 'global-api-teardown',
+      testMatch: 'tests/teardown/global.api.teardown.js',
+    },
+    {
       name: 'e2e chrome',
       use: { ...devices['Desktop Chrome'] },
       dependencies: ['global-setup'],
@@ -50,13 +43,11 @@ const config = defineConfig({
     },
     {
       name: 'API tests',
-      testMatch: '/tests/api/**/*.spec.js',
-      // dependencies: ['global-setup'],
-      // teardown: 'global-teardown',
+      testMatch: 'tests/api/**/*.spec.js',
+      dependencies: ['global-api-setup'],
+      teardown: 'global-api-teardown',
     },
-
   ],
-
 });
 
 export default config;

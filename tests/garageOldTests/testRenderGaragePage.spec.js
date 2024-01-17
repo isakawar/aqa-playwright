@@ -1,6 +1,6 @@
 import { expect, request } from '@playwright/test';
-import { test } from '../../../src/fixtures/userGaragePageAuth.js';
-import { userGarage } from '../../../src/fixtures/carsInGarage.js';
+import { test } from '../../src/fixtures/userGaragePageAuth.js';
+import { userGarage } from '../../src/fixtures/carsInGarage.js';
 
 test.describe('Replace json body', () => {
   test('should be able to create a car (modify response)', async ({ userGaragePage }) => {
