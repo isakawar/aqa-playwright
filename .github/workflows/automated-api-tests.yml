@@ -13,11 +13,11 @@ jobs:
           cp ./env/.env.example ./env/.env
       - name: "Run playwright tests"
         run: |
-          HTTP_CREDENTIALS_USERNAME=guest HTTP_CREDENTIALS_PASSWORD=welcome2qauto docker-compose run tests && echo "Tests passed" || echo "Tests failed"
+          HTTP_CREDENTIALS_USERNAME=guest HTTP_CREDENTIALS_PASSWORD=welcome2qauto docker-compose run tests npm run-script test:ui
       - name: "Copy test report"
-        run: |
-          mkdir -p playwright-report
-          docker cp playwright-tests:/playwright-tests/playwright-report ./playwright-report || echo "Failed to copy test report"
-     
-          
-
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 5
