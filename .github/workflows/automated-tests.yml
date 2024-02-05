@@ -8,12 +8,15 @@ jobs:
     steps:
       - name: "Checkout to tests repository"
         uses: actions/checkout@v4
+      - name: "Copy environment file"
+        run: |
+          cp ./env/.env.example ./env/.env
       - name: "Run playwright tests"
         run: |
           HTTP_CREDENTIALS_USERNAME=guest HTTP_CREDENTIALS_PASSWORD=welcome2qauto docker-compose up --exit-code-from tests
       - name: "Copy test report"
         run: |
           mkdir -p playwright-report
-          docker cp playwright-tests:/playwright-tests/playwright-report ./playwright-reportцц
+          docker cp playwright-tests:/playwright-tests/playwright-report ./playwright-report
           
 
