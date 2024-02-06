@@ -16,7 +16,7 @@ test.describe('Cars', () => {
       testUserData = JSON.parse(readData);
       client = await APIClient.authenticate(testUserData.email, testUserData.password);
       brands = await client.carController.getBrands();
-      const responseDeletALlCars = await client.carController.deletAllUserCars();
+      await client.carController.deletAllUserCars();
     });
 
     test.beforeEach(async () => {
