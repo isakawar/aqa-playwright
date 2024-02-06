@@ -54,6 +54,7 @@ class UserDataGenerator {
     const filePath = path.join(STORAGE_STATE_USER_PATH, STORAGE_STATE_FILE_NAME);
 
     fs.writeFileSync(filePath, JSON.stringify(userData, null, 2));
+    console.log('File with data created');
     return userData;
   };
 }
