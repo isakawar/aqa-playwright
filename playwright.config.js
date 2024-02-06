@@ -45,7 +45,7 @@ const config = defineConfig({
       name: 'API tests',
       testMatch: 'tests/api/**/*.spec.js',
       dependencies: ['global-api-setup'],
-      // teardown: 'global-api-teardown',
+      teardown: 'global-api-teardown',
     },
   ],
 });
