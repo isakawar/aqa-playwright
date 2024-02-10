@@ -10,4 +10,4 @@ VOLUME /playwright-report
 
 RUN npm ci
 
-CMD ["sh", "-c", "npm run", "test:api"]
+CMD ["sh", "-c", "npm run test:api"]
